@@ -4,7 +4,7 @@ BEGIN {
   n = 0
   while("cat stock_names" | getline) {
     stocks[n] = $0
-    symbols[n] = substr($2, 2, length($2) - 2)
+    symbols[n] = substr($1, 2, length($1) - 2)
     n++
   }
 
@@ -15,6 +15,7 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>" > ofile
   print "</select>" > ofile
+  print "<input type='number' min='0' max='100' step='0.01' id='ammount1' name='ammount1'/>" > ofile
   print "<br>" > ofile
 
   print "<label>Choose Stock 2:</label>" > ofile
@@ -22,6 +23,7 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>" > ofile
   print "</select>" > ofile
+  print "<input type='number' min='0' max='100' step='0.01' id='ammount2' name='ammount2'/>" > ofile
   print "<br>" > ofile
 
   print "<label>Choose Stock 3:</label>" > ofile
@@ -29,6 +31,7 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>" > ofile
   print "</select>" > ofile
+  print "<input type='number' min='0' max='100' step='0.01' id='ammount3' name='ammount3'/>" > ofile
   print "<br>" > ofile
 
   print "<label>Choose Stock 4:</label>" > ofile
@@ -36,6 +39,7 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>" > ofile
   print "</select>" > ofile
+  print "<input type='number' min='0' max='100' step='0.01' id='ammount4' name='ammount4'/>" > ofile
   print "<br>" > ofile
 
   print "<label>Choose Stock 5:</label>" > ofile
@@ -43,7 +47,15 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>" > ofile
   print "</select>" > ofile
+  print "<input type='number' min='0' max='100' step='0.01' id='ammount5' name='ammount5'/>" > ofile
   print "<br>" > ofile
+
+  print "<label>Start Date:</label>" > ofile
+  print "<input type='date' id='start' name='start'>" > ofile
+  print "<label>End Date:</label>" > ofile
+  print "<input type='date' id='end' name='end'>" > ofile
+  print "<br>" > ofile
+
   print "<input type='submit'>" > ofile
   print "</form>" > ofile
 
