@@ -86,16 +86,20 @@ function printFormValidation() {
     print "      alert('Missing date');" > ofile
     print "      return false;" > ofile
   	print "    }" > ofile
+    print "    if([6,0].includes(startDate.getUTCDay()) || [6,0].includes(endDate.getUTCDay())){" > ofile
+    print "      alert('No trading data on weekends');" > ofile
+    print "      return false;" > ofile
+    print "    }" > ofile
   	print "    if (endDate.getTime() <= startDate.getTime()) {" > ofile
     print "      alert('Time cant go backwards!');" > ofile
     print "      return false;" > ofile
   	print "    }" > ofile
   	print "    if (endDate.getTime() > (new Date()).getTime()){" > ofile
-    print "      alert('cant predict the future!');" > ofile
+    print "      alert('Cant predict the future!');" > ofile
     print "      return false;" > ofile
   	print "    }" > ofile
   	print "    if (startDate.getTime() < 788918400000){" > ofile
-    print "      alert('too far in the past! try something after 1995!');" > ofile
+    print "      alert('Too far in the past! try something after 1995!');" > ofile
     print "      return false;" > ofile
   	print "    }" > ofile
 

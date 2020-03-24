@@ -17,16 +17,20 @@
       alert('Missing date');
       return false;
     }
+    if([6,0].includes(startDate.getUTCDay()) || [6,0].includes(endDate.getUTCDay())){
+      alert('No trading data on weekends');
+      return false;
+    }
     if (endDate.getTime() <= startDate.getTime()) {
       alert('Time cant go backwards!');
       return false;
     }
     if (endDate.getTime() > (new Date()).getTime()){
-      alert('cant predict the future!');
+      alert('Cant predict the future!');
       return false;
     }
     if (startDate.getTime() < 788918400000){
-      alert('too far in the past! try something after 1995!');
+      alert('Too far in the past! try something after 1995!');
       return false;
     }
   }
