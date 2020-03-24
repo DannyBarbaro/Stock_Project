@@ -1,6 +1,46 @@
-<!DOCTYPE html><html><head><title>Investing Challenge</title></head><body>
+<!DOCTYPE html><html><head>
+<script>
+  function validateForm() {
+    var stock1 = document.forms['myForm']['ammount1'].value;
+    var stock2 = document.forms['myForm']['ammount2'].value;
+    var stock3 = document.forms['myForm']['ammount3'].value;
+    var stock4 = document.forms['myForm']['ammount4'].value;
+    var stock5 = document.forms['myForm']['ammount5'].value;
+    var sum = +stock1 + +stock2 + +stock3 + +stock4 + +stock5;
+    if (sum < 0 || sum > 100) {
+      alert('sum must be less than $100');
+      return false;
+    }
+    var startDate = myStringToDate(document.forms['myForm']['start'].value);
+    var endDate = myStringToDate(document.forms['myForm']['end'].value);
+    if (isNaN(endDate.getTime()) || isNaN(startDate.getTime())) {
+      alert('Missing date');
+      return false;
+    }
+    if (endDate.getTime() <= startDate.getTime()) {
+      alert('Time cant go backwards!');
+      return false;
+    }
+    if (endDate.getTime() > (new Date()).getTime()){
+      alert('cant predict the future!');
+      return false;
+    }
+    if (startDate.getTime() < 788918400000){
+      alert('too far in the past! try something after 1995!');
+      return false;
+    }
+  }
+  function myStringToDate(str) {
+    var arr  = str.split('-');
+    var yyyy = arr[0] - 0;
+    var jsmm = arr[1] - 1;
+    var dd   = arr[2] - 0;
+    return new Date(yyyy, jsmm, dd);
+  }
+</script>
+<title>Investing Challenge</title></head><body>
 <h2>Stock Investing Challange</h2>
-<form action=''>
+<form name='myForm' action='' onsubmit='return validateForm()'>
 <label>Choose Stock 1:</label>
 <select id='stock1' name='stock1'>
 <option value='ADBE'>(ADBE) Adobe</option>
