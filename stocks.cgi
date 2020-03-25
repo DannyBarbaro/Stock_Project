@@ -88,11 +88,8 @@ BEGIN {
   endY = substr(endDate, 0, 4)
   endM = substr(endDate, 6, 2)
   endD = substr(endDate, 9, 2)
-  # print "<!--"startDate"-->"
-  # print "<!--"endDate"-->"
-  # print "<!--"endY"-->"
-  # print "<!--"endM"-->"
-  # print "<!--"endD"-->"
+
+  #DF70XN4LUOOLN6TN
 
 }
 
@@ -130,8 +127,8 @@ function printFormValidation() {
     print "      alert('Cant predict the future!');"
     print "      return false;"
   	print "    }"
-  	print "    if (startDate.getTime() < 788918400000){"
-    print "      alert('Too far in the past! try something after 1995!');"
+  	print "    if (startDate.getTime() < 1104537600000){"
+    print "      alert('Too far in the past! try something after 2004!');"
     print "      return false;"
   	print "    }"
 
