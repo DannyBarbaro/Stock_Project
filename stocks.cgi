@@ -20,7 +20,7 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='ammount1' name='ammount1'/>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount1' name='amount1'/>"
   print "<br>"
 
   print "<label>Choose Stock 2:</label>"
@@ -28,7 +28,7 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='ammount2' name='ammount2'/>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount2' name='amount2'/>"
   print "<br>"
 
   print "<label>Choose Stock 3:</label>"
@@ -36,7 +36,7 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='ammount3' name='ammount3'/>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount3' name='amount3'/>"
   print "<br>"
 
   print "<label>Choose Stock 4:</label>"
@@ -44,7 +44,7 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='ammount4' name='ammount4'/>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount4' name='amount4'/>"
   print "<br>"
 
   print "<label>Choose Stock 5:</label>"
@@ -52,7 +52,7 @@ BEGIN {
   for (i = 1; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='ammount5' name='ammount5'/>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount5' name='amount5'/>"
   print "<br>"
 
   print "<label>Start Date:</label>"
@@ -65,22 +65,22 @@ BEGIN {
   print "</form>"
 
   print "</body></html>"
-  # if (query == ""){
-  #   exit
-  # }
-  #example query: "stock1=ADBE&ammount1=1&stock2=ADBE&ammount2=2&stock3=ADBE&ammount3=3&stock4=ADBE&ammount4=4&stock5=ADBE&ammount5=5&start=2000-01-04&end=2020-01-02"
+  if (query == ""){
+    exit
+  }
+  #example query: "stock1=ADBE&amount1=1&stock2=ADBE&amount2=2&stock3=ADBE&amount3=3&stock4=ADBE&amount4=4&stock5=ADBE&amount5=5&start=2000-01-04&end=2020-01-02"
   # Manually tested and verified that these work
   split(query,a,"&")
   stock[0] = substr(a[1], 8)
-  ammount[0] = substr(a[2], 10)
+  amount[0] = substr(a[2], 10)
   stock[1] = substr(a[3], 8)
-  ammount[1] = substr(a[4], 10)
+  amount[1] = substr(a[4], 10)
   stock[2] = substr(a[5], 8)
-  ammount[2] = substr(a[6], 10)
+  amount[2] = substr(a[6], 10)
   stock[3] = substr(a[7], 8)
-  ammount[3] = substr(a[8], 10)
+  amount[3] = substr(a[8], 10)
   stock[4] = substr(a[9], 8)
-  ammount[4] = substr(a[10], 10)
+  amount[4] = substr(a[10], 10)
 
   startDate = substr(a[11], 7)
   endDate = substr(a[12], 5)
@@ -123,7 +123,8 @@ BEGIN {
   # Calculate income and visualize it
   # startPrice[0-4] has the price of each stock on the starting day
   # endPrice[0-4] has the price of each stock on the ending day
-  # ammount[0-4] has the ammount invested on the start day
+  # amount[0-4] has the amount invested on the start day
+  stockAmount 
 
 
   # graph stocks
@@ -136,11 +137,11 @@ function printFormValidation() {
 	print "<script>"
 
 	print "  function validateForm() {"
-  	print "    var stock1 = document.forms['myForm']['ammount1'].value;"
-  	print "    var stock2 = document.forms['myForm']['ammount2'].value;"
-  	print "    var stock3 = document.forms['myForm']['ammount3'].value;"
-  	print "    var stock4 = document.forms['myForm']['ammount4'].value;"
-  	print "    var stock5 = document.forms['myForm']['ammount5'].value;"
+  	print "    var stock1 = document.forms['myForm']['amount1'].value;"
+  	print "    var stock2 = document.forms['myForm']['amount2'].value;"
+  	print "    var stock3 = document.forms['myForm']['amount3'].value;"
+  	print "    var stock4 = document.forms['myForm']['amount4'].value;"
+  	print "    var stock5 = document.forms['myForm']['amount5'].value;"
 
   	print "    var sum = +stock1 + +stock2 + +stock3 + +stock4 + +stock5;"
   	print "    if (sum < 0 || sum > 100) {"
