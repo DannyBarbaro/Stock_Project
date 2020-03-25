@@ -65,20 +65,22 @@ BEGIN {
   print "</form>"
 
   print "</body></html>"
-
+  # if (query == ""){
+  #   exit
+  # }
   #example query: "stock1=ADBE&ammount1=1&stock2=ADBE&ammount2=2&stock3=ADBE&ammount3=3&stock4=ADBE&ammount4=4&stock5=ADBE&ammount5=5&start=2000-01-04&end=2020-01-02"
   # Manually tested and verified that these work
   split(query,a,"&")
-  stock1 = substr(a[1], 8)
-  ammount1 = substr(a[2], 10)
-  stock2 = substr(a[3], 8)
-  ammount2 = substr(a[4], 10)
-  stock3 = substr(a[5], 8)
-  ammount3 = substr(a[6], 10)
-  stock4 = substr(a[7], 8)
-  ammount4 = substr(a[8], 10)
-  stock5 = substr(a[9], 8)
-  ammount5 = substr(a[10], 10)
+  stock[0] = substr(a[1], 8)
+  ammount[0] = substr(a[2], 10)
+  stock[1] = substr(a[3], 8)
+  ammount[1] = substr(a[4], 10)
+  stock[2] = substr(a[5], 8)
+  ammount[2] = substr(a[6], 10)
+  stock[3] = substr(a[7], 8)
+  ammount[3] = substr(a[8], 10)
+  stock[4] = substr(a[9], 8)
+  ammount[4] = substr(a[10], 10)
 
   startDate = substr(a[11], 7)
   endDate = substr(a[12], 5)
@@ -89,7 +91,44 @@ BEGIN {
   endM = substr(endDate, 6, 2)
   endD = substr(endDate, 9, 2)
 
-  #DF70XN4LUOOLN6TN
+  # loop for each stock, if stock names are not unique, subsequent calls will not work. 
+  for (i = 0; i < 5; i++){
+    api = "\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol="stock[i]"&apikey=DF70XN4LUOOLN6TN\""
+            print "<!--"stock[i]"-->"
+
+    # get start date and end date stock values
+    flag = 0 #idk why i couldn't get this to work without this stupid flag but wtv this works
+    while("curl "api | getline) {
+      if (flag == 1){
+        #starting day opening price
+        print "<!--"$0"-->"
+        startPrice[i] = $0
+        flag = 0
+      }
+      if (flag == 2){
+        #ending day opening price
+        print "<!--"$0"-->"
+        endPrice[i] = $0
+        flag = 0
+      }
+      if (index($0, startDate) != 0){
+        flag = 1
+      }
+      if (index($0, endDate) != 0){
+        flag = 2
+      }
+    }
+  }
+
+  # Calculate income and visualize it
+  # startPrice[0-4] has the price of each stock on the starting day
+  # endPrice[0-4] has the price of each stock on the ending day
+  # ammount[0-4] has the ammount invested on the start day
+
+
+  # graph stocks
+  # kinda annoying...
+  
 
 }
 
