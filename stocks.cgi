@@ -1,7 +1,9 @@
 #! /usr/bin/awk -f
 BEGIN {
+  query = ENVIRON["QUERY_STRING"] #grabbing the query string, its that easy lol
   print "Content-type: text/html \n" 
   print "<!DOCTYPE html><html><head>"
+
   printFormValidation()
   print "<title>Investing Challenge</title></head><body>"
   n = 0
@@ -63,6 +65,35 @@ BEGIN {
   print "</form>"
 
   print "</body></html>"
+
+  #example query: "stock1=ADBE&ammount1=1&stock2=ADBE&ammount2=2&stock3=ADBE&ammount3=3&stock4=ADBE&ammount4=4&stock5=ADBE&ammount5=5&start=2000-01-04&end=2020-01-02"
+  # Manually tested and verified that these work
+  split(query,a,"&")
+  stock1 = substr(a[1], 8)
+  ammount1 = substr(a[2], 10)
+  stock2 = substr(a[3], 8)
+  ammount2 = substr(a[4], 10)
+  stock3 = substr(a[5], 8)
+  ammount3 = substr(a[6], 10)
+  stock4 = substr(a[7], 8)
+  ammount4 = substr(a[8], 10)
+  stock5 = substr(a[9], 8)
+  ammount5 = substr(a[10], 10)
+
+  startDate = substr(a[11], 7)
+  endDate = substr(a[12], 5)
+  startY = substr(startDate, 0, 4)
+  startM = substr(startDate, 6, 2)
+  startD = substr(startDate, 9, 2)
+  endY = substr(endDate, 0, 4)
+  endM = substr(endDate, 6, 2)
+  endD = substr(endDate, 9, 2)
+  # print "<!--"startDate"-->"
+  # print "<!--"endDate"-->"
+  # print "<!--"endY"-->"
+  # print "<!--"endM"-->"
+  # print "<!--"endD"-->"
+
 }
 
 function printFormValidation() {
