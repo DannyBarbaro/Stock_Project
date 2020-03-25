@@ -72,15 +72,15 @@ BEGIN {
   # Manually tested and verified that these work
   split(query,a,"&")
   stock[0] = substr(a[1], 8)
-  amount[0] = substr(a[2], 10)
+  amount[0] = substr(a[2], 9)
   stock[1] = substr(a[3], 8)
-  amount[1] = substr(a[4], 10)
+  amount[1] = substr(a[4], 9)
   stock[2] = substr(a[5], 8)
-  amount[2] = substr(a[6], 10)
+  amount[2] = substr(a[6], 9)
   stock[3] = substr(a[7], 8)
-  amount[3] = substr(a[8], 10)
+  amount[3] = substr(a[8], 9)
   stock[4] = substr(a[9], 8)
-  amount[4] = substr(a[10], 10)
+  amount[4] = substr(a[10], 9)
 
   startDate = substr(a[11], 7)
   endDate = substr(a[12], 5)
@@ -92,6 +92,8 @@ BEGIN {
   endD = substr(endDate, 9, 2)
 
   # loop for each stock, if stock names are not unique, subsequent calls will not work. 
+  startPrice[0] = 0
+  endPrice[0] = 0
   for (i = 0; i < 5; i++){
     api = "\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol="stock[i]"&apikey=DF70XN4LUOOLN6TN\""
             print "<!--"stock[i]"-->"
@@ -102,13 +104,15 @@ BEGIN {
       if (flag == 1){
         #starting day opening price
         print "<!--"$0"-->"
-        startPrice[i] = $0
+        #NOTE, This is likely going to cause problems... grabing 7 digits of the stock.
+        # so 64.4700 works, 1348.41 works, 2.1234 will grab an extra character, likely a double quote character
+        startPrice[i] = substr($0, 25, 7) 
         flag = 0
       }
       if (flag == 2){
         #ending day opening price
         print "<!--"$0"-->"
-        endPrice[i] = $0
+        endPrice[i] = substr($0, 25, 7)
         flag = 0
       }
       if (index($0, startDate) != 0){
@@ -124,10 +128,18 @@ BEGIN {
   # startPrice[0-4] has the price of each stock on the starting day
   # endPrice[0-4] has the price of each stock on the ending day
   # amount[0-4] has the amount invested on the start day
-  stockAmount 
+  numStocksPurchased[0] = 0
+  endingValue[0] = 0
+  for (i = 0; i < 5; i++){
+    print "<!--"startPrice[i]"-->"
+    print "<!--"endPrice[i]"-->"
+    numStocksPurchased[i] = amount[i] / startPrice[i]
+    endingValue[i] = numStocksPurchased[i] * endPrice[i]
+    print "<!--"endingValue[i]"-->"
+  }
 
 
-  # graph stocks
+  # TODO graph stocks
   # kinda annoying...
   
 
