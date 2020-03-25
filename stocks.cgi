@@ -17,7 +17,7 @@ BEGIN {
   print "<form name='myForm' action='' onsubmit='return validateForm()'>"
   print "<label>Choose Stock 1:</label>"
   print "<select id='stock1' name='stock1'>"
-  for (i = 1; i < n; i++)
+  for (i = 0; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
   print "<input type='number' min='0' max='100' step='0.01' id='amount1' name='amount1'/>"
@@ -25,7 +25,7 @@ BEGIN {
 
   print "<label>Choose Stock 2:</label>"
   print "<select id='stock2' name='stock2'>"
-  for (i = 1; i < n; i++)
+  for (i = 0; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
   print "<input type='number' min='0' max='100' step='0.01' id='amount2' name='amount2'/>"
@@ -33,7 +33,7 @@ BEGIN {
 
   print "<label>Choose Stock 3:</label>"
   print "<select id='stock3' name='stock3'>"
-  for (i = 1; i < n; i++)
+  for (i = 0; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
   print "<input type='number' min='0' max='100' step='0.01' id='amount3' name='amount3'/>"
@@ -41,7 +41,7 @@ BEGIN {
 
   print "<label>Choose Stock 4:</label>"
   print "<select id='stock4' name='stock4'>"
-  for (i = 1; i < n; i++)
+  for (i = 0; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
   print "<input type='number' min='0' max='100' step='0.01' id='amount4' name='amount4'/>"
@@ -49,7 +49,7 @@ BEGIN {
 
   print "<label>Choose Stock 5:</label>"
   print "<select id='stock5' name='stock5'>"
-  for (i = 1; i < n; i++)
+  for (i = 0; i < n; i++)
     print "<option value='"symbols[i]"'>"stocks[i]"</option>"
   print "</select>"
   print "<input type='number' min='0' max='100' step='0.01' id='amount5' name='amount5'/>"
@@ -110,10 +110,12 @@ BEGIN {
         flag = 0
       }
       if (flag == 2){
-        #ending day opening price
-        print "<!--"$0"-->"
-        endPrice[i] = substr($0, 25, 7)
-        flag = 0
+        #ending day closing price
+        if (index($1, "4") != 0) {
+          print "<!--"$0"-->"
+          endPrice[i] = substr($0, 26, 7)
+          flag = 0
+        }
       }
       if (index($0, startDate) != 0){
         flag = 1
@@ -131,6 +133,7 @@ BEGIN {
   numStocksPurchased[0] = 0
   endingValue[0] = 0
   for (i = 0; i < 5; i++){
+    print "<!--"i"-->"
     print "<!--"startPrice[i]"-->"
     print "<!--"endPrice[i]"-->"
     numStocksPurchased[i] = amount[i] / startPrice[i]
