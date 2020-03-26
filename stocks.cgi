@@ -14,6 +14,7 @@ BEGIN {
   }
 
   print "<h2>Stock Investing Challange</h2>"
+  print "<p>You have $100 to invest in tech stocks. Choose your 5 socks, amounts, and a date range to see how you would do!</p>"
   print "<form name='myForm' action='' onsubmit='return validateForm()'>"
   print "<label>Choose Stock 1:</label>"
   print "<select id='stock1' name='stock1'>"
@@ -96,23 +97,24 @@ BEGIN {
   endPrice[0] = 0
   for (i = 0; i < 5; i++){
     api = "\"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol="stock[i]"&apikey=DF70XN4LUOOLN6TN\""
-            print "<!--"stock[i]"-->"
 
     # get start date and end date stock values
     flag = 0 #idk why i couldn't get this to work without this stupid flag but wtv this works
+    collectFlag = 0
     while("curl "api | getline) {
       if (flag == 1){
         #starting day opening price
-        print "<!--"$0"-->"
         #NOTE, This is likely going to cause problems... grabing 7 digits of the stock.
         # so 64.4700 works, 1348.41 works, 2.1234 will grab an extra character, likely a double quote character
         startPrice[i] = substr($0, 25, 7) 
         flag = 0
+        runningAmmount = substr($0, 25, 7)
+        stockdata[i, runningDate] = runningAmmount
+        collectFlag = 0
       }
       if (flag == 2){
         #ending day closing price
         if (index($1, "4") != 0) {
-          print "<!--"$0"-->"
           endPrice[i] = substr($0, 26, 7)
           flag = 0
         }
@@ -122,6 +124,14 @@ BEGIN {
       }
       if (index($0, endDate) != 0){
         flag = 2
+        collectFlag = 1
+      }
+      if (collectFlag == 1 && index($0, "-") != 0) {
+        runningDate = substr($1, 2, length($1) - 3)
+      }
+      if (collectFlag == 1 && index($0, "close") != 0) {
+        runningAmmount = substr($0, 26, 7)
+        stockdata[i, runningDate] = runningAmmount
       }
     }
   }
@@ -133,18 +143,46 @@ BEGIN {
   numStocksPurchased[0] = 0
   endingValue[0] = 0
   for (i = 0; i < 5; i++){
-    print "<!--"i"-->"
-    print "<!--"startPrice[i]"-->"
-    print "<!--"endPrice[i]"-->"
+    print "<h3>"stock[i]"</h3>"
+
+    percentChange = (endPrice[i] / startPrice[i] - 1) * 100
+    if (percentChange > 0) {
+      print "<h4 style='color:green'>+"
+    } else if (percentChange < 0) {
+      print "<h4 style='color:red'>"
+    } else {
+      print "<h4 style='color:grey'>"
+    }
+    printf "%.2f", percentChange
+    print "%</h4>"
+
     numStocksPurchased[i] = amount[i] / startPrice[i]
     endingValue[i] = numStocksPurchased[i] * endPrice[i]
-    print "<!--"endingValue[i]"-->"
+    amountChange = (endingValue[i] - amount[i])
+    if (amountChange > 0) {
+      print "<h4 style='color:green'>+ $"
+    } else if (amountChange < 0) {
+      print "<h4 style='color:red'>- $"
+      amountChange = amountChange*(-1)
+    } else {
+      print "<h4 style='color:grey'>+ $"
+    }
+    printf "%.2f", amountChange
+    print "</h4>"
+    # TODO create graph here
+    # just a line chart with the date and price
+    # line color green if positive, red if negative, blue if 0.
+    #    use the percentChange variable to determine this
+    for(datapoint in stockdata) {
+      split(datapoint, Q, SUBSEP)
+      if (Q[1] == i) {
+        print Q[2]" "stockdata[datapoint]
+      }
+    }
+    print "<h4 style='color: grey'>"
+    printf "Final Value: %.2f", endingValue[i]
+    print "</h4>"
   }
-
-
-  # TODO graph stocks
-  # kinda annoying...
-  
 
 }
 
