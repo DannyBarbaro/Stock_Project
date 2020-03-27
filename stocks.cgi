@@ -3,7 +3,7 @@ BEGIN {
   query = ENVIRON["QUERY_STRING"] #grabbing the query string, its that easy lol
   print "Content-type: text/html \n" 
   print "<!DOCTYPE html><html><head>"
-
+  print "<script src='https://cdn.anychart.com/releases/v8/js/anychart-base.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33'></script>"
   printFormValidation()
   print "<title>Investing Challenge</title></head><body>"
   n = 0
@@ -144,45 +144,76 @@ BEGIN {
   endingValue[0] = 0
   for (i = 0; i < 5; i++){
     print "<h3>"stock[i]"</h3>"
-
     percentChange = (endPrice[i] / startPrice[i] - 1) * 100
-    if (percentChange > 0) {
-      print "<h4 style='color:green'>+"
-    } else if (percentChange < 0) {
-      print "<h4 style='color:red'>"
-    } else {
-      print "<h4 style='color:grey'>"
-    }
-    printf "%.2f", percentChange
-    print "%</h4>"
 
-    numStocksPurchased[i] = amount[i] / startPrice[i]
-    endingValue[i] = numStocksPurchased[i] * endPrice[i]
-    amountChange = (endingValue[i] - amount[i])
-    if (amountChange > 0) {
-      print "<h4 style='color:green'>+ $"
-    } else if (amountChange < 0) {
-      print "<h4 style='color:red'>- $"
-      amountChange = amountChange*(-1)
-    } else {
-      print "<h4 style='color:grey'>+ $"
-    }
-    printf "%.2f", amountChange
-    print "</h4>"
-    # TODO create graph here
-    # just a line chart with the date and price
-    # line color green if positive, red if negative, blue if 0.
-    #    use the percentChange variable to determine this
-    for(datapoint in stockdata) {
-      split(datapoint, Q, SUBSEP)
-      if (Q[1] == i) {
-        print Q[2]" "stockdata[datapoint]
+    print "    <div style='width:50%; height:300px;' id='graph"i"'></div>"
+      print "<script>"
+      print "anychart.onDocumentReady(function () {"
+      print "var dataSet = anychart.data.set(["
+      for(datapoint in stockdata) {
+        split(datapoint, Q, SUBSEP)
+        if (Q[1] == i) {
+          split(Q[2], D, "-")
+          print "[ Date.UTC("D[1]", "D[2]-1", "D[3]"), "stockdata[datapoint] "],"
+        }
       }
-    }
-    print "<h4 style='color: grey'>"
-    printf "Final Value: %.2f", endingValue[i]
-    print "</h4>"
+      print "]);"
+      print "var seriesData = dataSet.mapAs({'x': 0, 'value': 1});"
+      print "var chart = anychart.line();"
+      print "var dateScale = anychart.scales.dateTime();"
+      print "chart.xScale(dateScale);"
+      print "chart.animation(true);"
+      print "chart.padding([10, 20, 5, 20]);"
+      print "chart.crosshair().enabled(true).yLabel(false).yStroke(null);"
+      print "chart.tooltip().positionMode('point');"
+      print "chart.title('"stock[i]" Stock from "startDate" to "endDate"');"
+      print "chart.yAxis().title('Price Per Share (USD)');"
+      print "chart.xAxis().labels().padding(5);"
+      print "var series = chart.line(seriesData);"
+      print "series.name('"stock[i]"');"
+      print "series.hovered().markers().enabled(true).type('circle').size(4);"
+      print "series.tooltip().position('right').anchor('left-center').offsetX(5).offsetY(5);"
+      if (percentChange > 0) {
+        print "series.stroke('green')"
+      } else if (percentChange < 0) {
+        print "series.stroke('red')"
+      }
+      print "chart.container('graph"i"');"
+      print "chart.draw();"
+      print "}) </script>"
+
+      if (percentChange > 0) {
+        print "<h4 style='color:green'>+"
+      } else if (percentChange < 0) {
+        print "<h4 style='color:red'>"
+      } else {
+        print "<h4 style='color:grey'>"
+      }
+      printf "%.2f", percentChange
+      print "%</h4>"
+
+      numStocksPurchased[i] = amount[i] / startPrice[i]
+      endingValue[i] = numStocksPurchased[i] * endPrice[i]
+      sum += endingValue[i]
+      amountChange = (endingValue[i] - amount[i])
+      if (amountChange > 0) {
+        print "<h4 style='color:green'>+ $"
+      } else if (amountChange < 0) {
+        print "<h4 style='color:red'>- $"
+        amountChange = amountChange*(-1)
+      } else {
+        print "<h4 style='color:grey'>+ $"
+      }
+      printf "%.2f", amountChange
+      print "</h4>"
+      print "<h4 style='color: grey'>"
+      printf "Final Value: %.2f", endingValue[i]
+      print "</h4>"
+
   }
+  print "<h3> You turned your $100 into: "
+  printf "$%.2f", sum
+  print "</h3>"
 
 }
 
