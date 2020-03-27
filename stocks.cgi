@@ -6,7 +6,7 @@ BEGIN {
   print "<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>"
   print "<script src='https://cdn.anychart.com/releases/v8/js/anychart-base.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33'></script>"
   printFormValidation()
-  print "<title>Investing Challenge</title></head><body>"
+  print "<title>Investing Challenge</title></head><body style='text-align: center;'>"
   n = 0
   while("cat stock_names" | getline) {
     stocks[n] = $0
@@ -162,8 +162,9 @@ BEGIN {
   for (i = 0; i < 5; i++){
     print "<h3>"stock[i]"</h3>"
     percentChange = (endPrice[i] / startPrice[i] - 1) * 100
-
-    print "    <div style='width:50%; height:300px;' id='graph"i"'></div>"
+    print "<div class='row'>"
+    print "<div class='col-md-9'>"
+    print "    <div style='width:100%; height:300px;' id='graph"i"'></div>"
       print "<script>"
       print "anychart.onDocumentReady(function () {"
       print "var dataSet = anychart.data.set(["
@@ -198,7 +199,9 @@ BEGIN {
       print "chart.container('graph"i"');"
       print "chart.draw();"
       print "}) </script>"
-
+      print "</div>"
+      print "<div class='col-md-3' style='position: relative;'>"
+      print "<div style='margin: 0; position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);'>"
       if (percentChange > 0) {
         print "<h4 style='color:green'>+"
       } else if (percentChange < 0) {
@@ -208,7 +211,6 @@ BEGIN {
       }
       printf "%.2f", percentChange
       print "%</h4>"
-
       numStocksPurchased[i] = amount[i] / startPrice[i]
       endingValue[i] = numStocksPurchased[i] * endPrice[i]
       sum += endingValue[i]
@@ -224,8 +226,14 @@ BEGIN {
       printf "%.2f", amountChange
       print "</h4>"
       print "<h4 style='color: grey'>"
-      printf "Starting Value: $%.2f \t Final Value: $%.2f", amount[i], endingValue[i]
+      printf "Starting Value: $%.2f", amount[i]
       print "</h4>"
+      print "<h4 style='color: grey'>"
+      printf "Final Value: $%.2f", endingValue[i]
+      print "</h4>"
+      print "</div>"
+      print "</div>"
+      print "</div>"
 
   }
   print "<h3> You turned your $100 into: "
