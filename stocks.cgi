@@ -3,6 +3,7 @@ BEGIN {
   query = ENVIRON["QUERY_STRING"] #grabbing the query string, its that easy lol
   print "Content-type: text/html \n" 
   print "<!DOCTYPE html><html><head>"
+  print "<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>"
   print "<script src='https://cdn.anychart.com/releases/v8/js/anychart-base.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33'></script>"
   printFormValidation()
   print "<title>Investing Challenge</title></head><body>"
@@ -15,60 +16,7 @@ BEGIN {
 
   print "<h2>Stock Investing Challange</h2>"
   print "<p>You have $100 to invest in tech stocks. Choose your 5 socks, amounts, and a date range to see how you would do!</p>"
-  print "<form name='myForm' action='' onsubmit='return validateForm()'>"
-  print "<label>Choose Stock 1:</label>"
-  print "<select id='stock1' name='stock1'>"
-  for (i = 0; i < n; i++)
-    print "<option value='"symbols[i]"'>"stocks[i]"</option>"
-  print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='amount1' name='amount1'/>"
-  print "<br>"
-
-  print "<label>Choose Stock 2:</label>"
-  print "<select id='stock2' name='stock2'>"
-  for (i = 0; i < n; i++)
-    print "<option value='"symbols[i]"'>"stocks[i]"</option>"
-  print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='amount2' name='amount2'/>"
-  print "<br>"
-
-  print "<label>Choose Stock 3:</label>"
-  print "<select id='stock3' name='stock3'>"
-  for (i = 0; i < n; i++)
-    print "<option value='"symbols[i]"'>"stocks[i]"</option>"
-  print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='amount3' name='amount3'/>"
-  print "<br>"
-
-  print "<label>Choose Stock 4:</label>"
-  print "<select id='stock4' name='stock4'>"
-  for (i = 0; i < n; i++)
-    print "<option value='"symbols[i]"'>"stocks[i]"</option>"
-  print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='amount4' name='amount4'/>"
-  print "<br>"
-
-  print "<label>Choose Stock 5:</label>"
-  print "<select id='stock5' name='stock5'>"
-  for (i = 0; i < n; i++)
-    print "<option value='"symbols[i]"'>"stocks[i]"</option>"
-  print "</select>"
-  print "<input type='number' min='0' max='100' step='0.01' id='amount5' name='amount5'/>"
-  print "<br>"
-
-  print "<label>Start Date:</label>"
-  print "<input type='date' id='start' name='start'>"
-  print "<label>End Date:</label>"
-  print "<input type='date' id='end' name='end'>"
-  print "<br>"
-
-  print "<input type='submit'>"
-  print "</form>"
-
-  print "</body></html>"
-  if (query == ""){
-    exit
-  }
+  
   #example query: "stock1=ADBE&amount1=1&stock2=ADBE&amount2=2&stock3=ADBE&amount3=3&stock4=ADBE&amount4=4&stock5=ADBE&amount5=5&start=2000-01-04&end=2020-01-02"
   # Manually tested and verified that these work
   split(query,a,"&")
@@ -91,6 +39,75 @@ BEGIN {
   endY = substr(endDate, 0, 4)
   endM = substr(endDate, 6, 2)
   endD = substr(endDate, 9, 2)
+  
+  print "<form name='myForm' action='' onsubmit='return validateForm()'>"
+  print "<label>Choose Stock 1:</label>"
+  print "<select id='stock1' name='stock1'>"
+  for (i = 0; i < n; i++)
+    if (symbols[i] == stock[0]) {
+      print "<option value='"symbols[i]"' selected>"stocks[i]"</option>"
+    } else {
+      print "<option value='"symbols[i]"'>"stocks[i]"</option>"
+    }
+  print "</select>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount1' name='amount1'/>"
+  print "<br>"
+
+  print "<label>Choose Stock 2:</label>"
+  print "<select id='stock2' name='stock2'>"
+  for (i = 0; i < n; i++)
+    if (symbols[i] == stock[1]) {
+      print "<option value='"symbols[i]"' selected>"stocks[i]"</option>"
+    } else {
+      print "<option value='"symbols[i]"'>"stocks[i]"</option>"
+    }  print "</select>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount2' name='amount2'/>"
+  print "<br>"
+
+  print "<label>Choose Stock 3:</label>"
+  print "<select id='stock3' name='stock3'>"
+  for (i = 0; i < n; i++)
+    if (symbols[i] == stock[2]) {
+      print "<option value='"symbols[i]"' selected>"stocks[i]"</option>"
+    } else {
+      print "<option value='"symbols[i]"'>"stocks[i]"</option>"
+    }
+  print "</select>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount3' name='amount3'/>"
+  print "<br>"
+
+  print "<label>Choose Stock 4:</label>"
+  print "<select id='stock4' name='stock4'>"
+  for (i = 0; i < n; i++)
+    if (symbols[i] == stock[3]) {
+      print "<option value='"symbols[i]"' selected>"stocks[i]"</option>"
+    } else {
+      print "<option value='"symbols[i]"'>"stocks[i]"</option>"
+    }
+  print "</select>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount4' name='amount4'/>"
+  print "<br>"
+
+  print "<label>Choose Stock 5:</label>"
+  print "<select id='stock5' name='stock5'>"
+  for (i = 0; i < n; i++)
+    if (symbols[i] == stock[4]) {
+      print "<option value='"symbols[i]"' selected>"stocks[i]"</option>"
+    } else {
+      print "<option value='"symbols[i]"'>"stocks[i]"</option>"
+    }
+  print "</select>"
+  print "<input type='number' min='0' max='100' step='0.01' id='amount5' name='amount5'/>"
+  print "<br>"
+
+  print "<label>Start Date:</label>"
+  print "<input type='date' id='start' name='start' value='"startDate"'>"
+  print "<label>End Date:</label>"
+  print "<input type='date' id='end' name='end' value='"endDate"'>"
+  print "<br>"
+
+  print "<input type='submit'>"
+  print "</form>"  
 
   # loop for each stock, if stock names are not unique, subsequent calls will not work. 
   startPrice[0] = 0
@@ -207,13 +224,14 @@ BEGIN {
       printf "%.2f", amountChange
       print "</h4>"
       print "<h4 style='color: grey'>"
-      printf "Final Value: %.2f", endingValue[i]
+      printf "Starting Value: $%.2f \t Final Value: $%.2f", amount[i], endingValue[i]
       print "</h4>"
 
   }
   print "<h3> You turned your $100 into: "
   printf "$%.2f", sum
   print "</h3>"
+  print "</body></html>"
 
 }
 
